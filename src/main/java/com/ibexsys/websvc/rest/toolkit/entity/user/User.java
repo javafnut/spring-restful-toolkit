@@ -5,7 +5,13 @@ import com.ibexsys.websvc.rest.toolkit.entity.post.Post;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+//import javax.persistence.GeneratedValue;
+import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.GenerationType;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
+import javax.validation.constraints.Past;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,13 +20,20 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     private Long id;
 
-    protected User(){}
+    @Size(min=2,max=32, message="size at least 2 characters")
+    private String name;
+
+    @Past(message="Birthdate must be in the past!")
+    private Date birthDate;
 
     @OneToMany(mappedBy="user")
-    private List<Post> posts;
+    private List<Post> posts = new ArrayList<Post>();
+
+    protected User(){}
 
     public User(Long id, String name, Date birthDate) {
         super();
@@ -29,9 +42,28 @@ public class User {
         this.birthDate = birthDate;
     }
 
-    private String name;
+    public List<Post> getPosts(){
+        return this.posts;
+    }
 
-    private Date birthDate;
+    public void addPost(Post post){
+        if (post != null) {
+            posts.add(post);
+        }
+    }
+
+    public Post getPost(Long id){
+
+        //@TODO Use a lamdba heere
+
+        for (Post post : posts){
+            if (post.getId() == id){
+                return post;
+            }
+        }
+
+          return null;
+    }
 
     public Long getId() {
         return id;
