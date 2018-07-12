@@ -1,14 +1,26 @@
 package com.ibexsys.websvc.rest.toolkit.entity.user;
 
+import com.ibexsys.websvc.rest.toolkit.entity.post.Post;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.Date;
+import java.util.List;
 
 
-
+@Entity
 public class User {
 
+    @Id
+    @GeneratedValue
     private Long id;
 
     protected User(){}
+
+    @OneToMany(mappedBy="user")
+    private List<Post> posts;
 
     public User(Long id, String name, Date birthDate) {
         super();
