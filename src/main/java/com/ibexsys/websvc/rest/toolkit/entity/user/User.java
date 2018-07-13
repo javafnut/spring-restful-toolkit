@@ -31,7 +31,7 @@ public class User {
     private Date birthDate;
 
     @OneToMany(mappedBy="user")
-    private List<Post> posts = new ArrayList<Post>();
+    private final List<Post> posts = new ArrayList<>();
 
     protected User(){}
 
@@ -57,7 +57,7 @@ public class User {
         //@TODO Use a lamdba heere
 
         for (Post post : posts){
-            if (post.getId() == id){
+            if (post.getId().equals(id)){
                 return post;
             }
         }
@@ -69,9 +69,9 @@ public class User {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 
     public String getName() {
         return name;

@@ -4,9 +4,9 @@ import java.util.Date;
 
 public class ExceptionResponse {
 
-    private String message;
-    private Date timestamp;
-    private String details;
+    private final String message;
+    private final Date timestamp;
+    private final String details;
 
     public ExceptionResponse(Date timestamp, String message, String details) {
         super();

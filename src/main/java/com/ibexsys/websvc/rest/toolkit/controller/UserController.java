@@ -23,13 +23,13 @@ import javax.validation.Valid;
 public class UserController {
 
     @Autowired
-    UserDaoService service;
+    private UserDaoService service;
 
     @Autowired
-    UserRepository userRepo;
+    private UserRepository userRepo;
 
     @Autowired
-    PostRepository postRepo;
+    private PostRepository postRepo;
 
 
     @GetMapping("/users")
@@ -37,12 +37,12 @@ public class UserController {
        return userRepo.findAll();
     }
 
-     @GetMapping("/users/{id}")
-     public Optional<User> getUserById(@PathVariable Long id){
+    @GetMapping("/users/{id}")
+    public Optional<User> getUserById(@PathVariable Long id){
 
         Optional<User> user = userRepo.findById(id);
 
-         if (user == null) {
+         if (!user.isPresent()) {
             throw new UserNotFoundException("User Not Found id:" + id);
          }
 
@@ -54,7 +54,7 @@ public class UserController {
 
          Optional<User> user = userRepo.findById(id);
 
-         if (user != null) {
+         if (user.isPresent()) {
              userRepo.deleteById(id);
          } else {
              throw new UserNotFoundException("User Not Found id:" + id);

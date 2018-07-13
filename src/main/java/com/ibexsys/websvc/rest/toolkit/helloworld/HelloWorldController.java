@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloWorldController {
 
     @Autowired
-    MessageSource messageSource;
+    private MessageSource messageSource;
 
 
     @GetMapping(path="/hello-world")
