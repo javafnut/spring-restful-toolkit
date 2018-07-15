@@ -35,11 +35,21 @@ public class HelloWorldController {
     }
 
 
+     // Method when using Session Local Resolver Note: See ToolKitApplication for corresponding commented code
+//    @GetMapping(path = "/hello-world-internationalized")
+//    public String helloWorldInternationalized(@RequestHeader(name="Accept-Language", required=false) Locale locale) {
+//        return messageSource.getMessage("good.morning.message", null,
+//                locale);
+//    }
+
+
+    // Method when using AcceptHeaderLocalResolver Note: See ToolKitApplication for corresponding commented code
     @GetMapping(path = "/hello-world-internationalized")
-    public String helloWorldInternationalized2() {
+    public String helloWorldInternationalized() {
         return messageSource.getMessage("good.morning.message", null,
                 LocaleContextHolder.getLocale());
     }
+
 
 
 

@@ -8,11 +8,16 @@ import com.ibexsys.websvc.rest.toolkit.entity.post.Post;
 import com.ibexsys.websvc.rest.toolkit.entity.user.User;
 import com.ibexsys.websvc.rest.toolkit.entity.user.UserDaoService;
 
+// @TODO Get all static methods ??? is this an exception to best practices
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 import com.ibexsys.websvc.rest.toolkit.entity.user.UserNotFoundException;
 import com.ibexsys.websvc.rest.toolkit.repository.PostRepository;
 import com.ibexsys.websvc.rest.toolkit.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
+import org.springframework.hateoas.mvc.ControllerLinkBuilderFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -37,6 +42,8 @@ public class UserController {
        return userRepo.findAll();
     }
 
+
+    // Non-HATEOAS VERSION
     @GetMapping("/users/{id}")
     public Optional<User> getUserById(@PathVariable Long id){
 
@@ -49,8 +56,43 @@ public class UserController {
         return user;
      }
 
+    // HATEOAS VERSION
+    @GetMapping("/user_hateoas/{id}")
+    public  Resource<User> getUserByIdHATEOAS(@PathVariable Long id){
+
+        Optional<User> user = userRepo.findById(id);
+        ControllerLinkBuilder linkTo = null;
+
+        if (!user.isPresent()) {
+            throw new UserNotFoundException("User Not Found id:" + id);
+        }
+
+        /** HATEOS - Simple Example
+         - Used for returning multiple links on one page
+         - Create "all-users", link in the results SERVER_PATYH + /users
+         - In this case use method retrieveAllUsers()
+         1. Create a resource
+         2. use ControllerLinkBuilder to link the method of this call to call methdd
+         3. Add link to resource
+         **/
+
+        Resource<User> resource =  new Resource<User>(user.get());
+
+        // Add All Users
+        linkTo = linkTo(methodOn(this.getClass()).retreiveAllUsers());
+        resource.add(linkTo.withRel("all-users"));
+
+       // Delete this user - @TODO how to change header from get to delete and handle void return
+       // linkTo = linkTo(methodOn(this.getClass()).deleteUserById(id));
+       // resource.add(linkTo.withRel("delete-this-user"));
+
+        return resource;
+    }
+
+
+
      @DeleteMapping("/users/{id}")
-     public void  deleteUserById(@PathVariable Long id){
+     public void deleteUserById(@PathVariable Long id){
 
          Optional<User> user = userRepo.findById(id);
 
@@ -60,6 +102,9 @@ public class UserController {
              throw new UserNotFoundException("User Not Found id:" + id);
          }
      }
+
+
+
 
 
      @PostMapping("/users")
