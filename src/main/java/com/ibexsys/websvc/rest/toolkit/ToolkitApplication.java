@@ -29,7 +29,7 @@ public class ToolkitApplication {
     /**  Using SessionLocaleResolver, see corresponding example in HelloWorldController
     @Bean
     public LocaleResolver localeResolver() {
-        SessionlocaleResolver = new SessionLocaleResolver();
+        SessionlocaleResolver = new SessionLocaleResolver();K
         localeResolver.setDefaultLocale(Locale.US);
         return localeResolver;
     }

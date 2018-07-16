@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 //import javax.persistence.GeneratedValue;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.GenerationType;
 import javax.persistence.OneToMany;
@@ -16,7 +18,10 @@ import java.util.Date;
 import java.util.List;
 
 
+// NOTE: Swagger annotations of @ApiModel and @ApiModelProperty
+
 @Entity
+@ApiModel(description = "Sample User Model")
 public class User {
 
     @Id
@@ -24,10 +29,13 @@ public class User {
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
 
+
     @Size(min=2,max=32, message="size at least 2 characters")
+    @ApiModelProperty(notes="size at least 2 characters")
     private String name;
 
-    @Past(message="Birthdate must be in the past!")
+    @Past(message="Birth Date must be in the past!")
+    @ApiModelProperty(notes="Birth Date must be in the past!")
     private Date birthDate;
 
     @OneToMany(mappedBy="user")
@@ -68,10 +76,6 @@ public class User {
     public Long getId() {
         return id;
     }
-
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
 
     public String getName() {
         return name;
